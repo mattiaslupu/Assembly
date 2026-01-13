@@ -1,0 +1,95 @@
+.data
+    x: .word 16
+    v: .word 3, 9, 25, 4, 10
+    n: .word 5
+    k: .word 3 
+    
+.text
+
+
+.global main
+
+
+main:
+    
+    la a0, v
+    lw a1, n
+    lw a2, k
+    call divizori_elemente
+    
+    
+returnare:
+    li a7, 1
+    ecall
+    
+    
+et_exit:
+    li a7, 93
+    li a0, 0
+    ecall
+    
+    
+    
+    
+divizor:
+    
+    addi sp, sp, -8
+    sw ra, 4(sp)
+    sw s0, 0(sp)
+    addi s0, sp, 0
+    li t0, 1
+    li t2, 0
+    li t3, 0
+loop:
+    
+    bgt t0, a0, afisare
+    rem t1, a0, t0
+    bne t1, t2,  incrementare
+    addi t3, t3, 1
+    
+incrementare:
+    
+    addi t0, t0, 1
+    j loop
+    
+afisare:
+    
+    addi a0, t3, 0
+    lw s0, 0(sp)
+    
+    lw ra, 4(sp)
+    addi sp, sp, 8
+    ret
+    
+divizori_elemente:
+    addi sp, sp, -8
+    sw ra, 4(sp)
+    sw s0, 0(sp)
+    li s1, 0
+    addi s0, sp, 0
+    li t4, 0
+    
+et_loop:
+    bge t4, a1, exit_loop
+    slli t5, t4, 2
+    add t6, a0, t5
+     addi sp, sp, -4
+    sw a0, 0(sp)
+    lw a0, 0(t6)
+    call divizor
+    bne a0, a2, nu_au_k_div
+    addi s1, s1, 1 
+    
+nu_au_k_div:
+    lw a0, 0(sp)
+    addi sp, sp, 4
+    addi t4, t4, 1
+    j et_loop
+exit_loop:
+    addi a0, s1, 0
+    lw s0, 0(sp)
+    lw ra, 4(sp)
+    addi sp, sp, 8
+    ret
+    
+    

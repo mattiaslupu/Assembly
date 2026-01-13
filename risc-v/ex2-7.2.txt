@@ -1,0 +1,117 @@
+.data
+    x: .word 16
+    str_start:  .asciz "Numărul "
+    str_are:    .asciz " are "
+    str_div:    .asciz " divizori: "
+    str_virgula:.asciz ", "
+    newline:    .asciz "\n"
+    
+.text
+
+
+.global main
+
+
+main:
+    
+    lw a0, x
+    call divizor
+    
+returnare:
+    li a7, 1
+    ecall
+    
+    
+et_exit:
+    li a7, 93
+    li a0, 0
+    ecall
+    
+    
+    
+    
+divizor:
+    
+    addi sp, sp, -8
+    sw ra, 4(sp)
+    sw s0, 0(sp)
+    mv s0, sp
+    li t0, 1
+    li t2, 0
+    li t3, 0
+loop:
+    
+    bgt t0, a0, afisare
+    
+    rem t1, a0, t0
+    
+    bne t1, t2,  incrementare
+    addi sp, sp, -4
+    sw t0, 0(sp)
+    addi t3, t3, 1
+    
+incrementare:
+    
+    addi t0, t0, 1
+    j loop
+    
+afisare:
+      mv s1, t3
+    
+    li a7, 4
+    la a0, str_start
+    ecall
+
+    # 2. Valoarea X (o reîncărcăm din memorie ca să fie simplu)
+    lw a0, x
+    li a7, 1
+    ecall
+
+    # 3. " are "
+    li a7, 4
+    la a0, str_are
+    ecall
+
+    # 4. Nr divizori (Aici folosim contorul calculat de tine!)
+    mv a0, s1           # Mutăm contorul în a0 pentru afișare
+    li a7, 1
+    ecall
+
+    # 5. " divizori: "
+    li a7, 4
+    la a0, str_div
+    ecall
+    
+    addi t4, s0, -4
+    
+loop_afisare:
+    blt t4, sp, exit_afisare
+    
+    lw a0, 0(t4)
+    li a7, 1
+    ecall
+    
+    beq t4, sp, skip_virgula
+    
+    li a7, 4
+    la a0, str_virgula
+    ecall
+
+skip_virgula:
+    addi t4, t4, -4
+    j loop_afisare
+    
+exit_afisare:
+    li a7, 4
+    la a0, newline
+    ecall
+    
+    mv a0, s1
+    
+    mv, sp, s0
+    lw s0, 0(sp)
+    lw ra, 4(sp)
+    addi sp, sp, 8
+    ret
+    
+    
