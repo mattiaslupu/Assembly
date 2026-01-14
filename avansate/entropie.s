@@ -18,14 +18,14 @@ et_loop:
 	cmp 12(%ebp), %ebx
 	jge exit_loop
 	
-	flds (%edi, %ecx, 4)
+	flds (%edi, %ebx, 4)
 	subl $4, %esp
 	fstps 0(%esp)
 	call logf
 	fstps rez
 	addl $4, %esp
 	
-	movss (%edi, %ecx, 4), %xmm0
+	movss (%edi, %ebx, 4), %xmm0
 	movss rez, %xmm1
 	mulss  %xmm0, %xmm1
 	addss %xmm1, %xmm2
@@ -56,7 +56,7 @@ main:
 	fstpl 4(%esp)
 	push $fs
 	call printf
-	addl $8, %esp
+	addl $12, %esp
 et_exit:
 	movl $1, %eax
 	xorl %ebx, %ebx
