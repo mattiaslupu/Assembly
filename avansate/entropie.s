@@ -53,7 +53,7 @@ main:
 	addl $8, %esp
 	
 	subl $8, %esp
-	fstpl 4(%esp)
+	fstpl (%esp)
 	push $fs
 	call printf
 	addl $12, %esp
