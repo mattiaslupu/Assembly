@@ -27,7 +27,7 @@ et_loop:
 	
 	movss (%edi, %ebx, 4), %xmm0
 	movss rez, %xmm1
-	mulss  %xmm0, %xmm1
+	mulss %xmm0, %xmm1
 	addss %xmm1, %xmm2
 	incl %ebx
 	jmp et_loop
