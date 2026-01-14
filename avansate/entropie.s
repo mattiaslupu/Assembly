@@ -15,7 +15,7 @@ entropie:
 	pxor %xmm2, %xmm2
 et_loop:
 	cmp 12(%ebp), %ecx
-	jg exit_loop
+	jge exit_loop
 	
 	flds (%edi, %ecx, 4)
 	subl $4, %esp
@@ -31,6 +31,7 @@ et_loop:
 	mulss  %xmm0, %xmm1
 	addss %xmm1, %xmm2
 	incl %ecx
+	jmp et_loop
 exit_loop:
 	mulss minus_unu, %xmm2
 	movss %xmm2, rez
