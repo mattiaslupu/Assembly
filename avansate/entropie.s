@@ -10,19 +10,18 @@ entropie:
 	push %ebp
 	mov %esp, %ebp
 	push %edi
+	push %ebx
 	mov 8(%ebp), %edi
-	xorl %ecx, %ecx
+	xorl %ebx, %ebx
 	pxor %xmm2, %xmm2
 et_loop:
-	cmp 12(%ebp), %ecx
+	cmp 12(%ebp), %ebx
 	jge exit_loop
 	
 	flds (%edi, %ecx, 4)
 	subl $4, %esp
 	fstps 0(%esp)
-	
 	call logf
-	
 	fstps rez
 	addl $4, %esp
 	
@@ -30,12 +29,13 @@ et_loop:
 	movss rez, %xmm1
 	mulss  %xmm0, %xmm1
 	addss %xmm1, %xmm2
-	incl %ecx
+	incl %ebx
 	jmp et_loop
 exit_loop:
 	mulss minus_unu, %xmm2
 	movss %xmm2, rez
 	flds rez
+	pop %ebx
 	pop %edi
 	pop %ebp
 	ret	
@@ -54,7 +54,7 @@ main:
 	
 	subl $8, %esp
 	fstpl 4(%esp)
-	movl $fs, 0(%esp)
+	push $fs
 	call printf
 	addl $8, %esp
 et_exit:
