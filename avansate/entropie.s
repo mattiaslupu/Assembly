@@ -17,12 +17,16 @@ entropie:
 et_loop:
 	cmp 12(%ebp), %ebx
 	jge exit_loop
+	subl $4, %esp
+	movss %xmm2, (%esp)
 	
 	flds (%edi, %ebx, 4)
 	subl $4, %esp
 	fstps 0(%esp)
 	call logf
 	fstps rez
+	addl $4, %esp
+	movss (%esp), %xmm2
 	addl $4, %esp
 	
 	movss (%edi, %ebx, 4), %xmm0
